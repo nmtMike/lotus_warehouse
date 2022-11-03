@@ -1,0 +1,1 @@
+this web app is built for warehouse managing processing of Lotus Group
