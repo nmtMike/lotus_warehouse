@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Misa Request</h2>
+    <p>Upload your Misa request here</p>
+
+    <form action="/misa_request" method="POST" enctype="multipart/form-data">
+        <label for="file">Misa File: </label>
+        <input type="file" id="file" name="file"> <br>
+        <button>Upload</button>
+
+
+    </form>
+
+</div>
+    
+{% endblock %}

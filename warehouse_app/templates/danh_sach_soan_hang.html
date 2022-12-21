@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <table class="table table-hover" id="table">
+        <thead>
+          <tr>
+            {% for column_name in column_names %}
+            <th>{{column_name}}</th>
+            {% endfor %}
+            <!-- <th>Check</th> -->
+            <th>so_luong</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for row_data in row %}
+                <td>{{row_data}} </td>
+                {% endfor %}
+                <!-- <td> <input type="checkbox" id="vehicle1" name="vehicle1" value="checked"> </td> -->
+                <td> <input type="number" id="quantity" name="quantity" min="1" max="5"> </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary">Submit</button>
+
+</div>
+
+
+
+{% endblock %}
