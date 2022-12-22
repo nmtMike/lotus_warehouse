@@ -1,7 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h5>File uploaded successfully:</h5>
-    <p>{{f_name}}</p>
 
+    <div class="container">
+        <h5>Take a quick review and confirm</h5>
+        <br>
+        <form action="/misa_confirmed" method="POST">
+            <input type="submit" value="confirm" name="confirm">
+        </form>
+        <table class="table table-hover" id="table">
+            <thead>
+            <tr>
+                {% for column_name in column_names %}
+                <th>{{column_name}}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for row_data in row %}
+                    <td>{{row_data}} </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+    </div>
 {% endblock %}
