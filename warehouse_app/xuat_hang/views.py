@@ -19,3 +19,5 @@ def soan_hang():
     rows = df.values.tolist()
     column_names = df.columns.values
     return render_template('danh_sach_soan_hang.html', rows=rows, column_names=column_names)
+
+

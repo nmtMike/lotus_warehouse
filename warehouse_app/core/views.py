@@ -1,7 +1,7 @@
 from flask import render_template,request, Blueprint, redirect, url_for
 import pandas as pd
-from warehouse_app.models import engine
-from warehouse_app.function import misa_check
+from warehouse_app.models import engine, session
+from warehouse_app.function import misa_check, add_modi_info, misa_process
 
 core = Blueprint('core', __name__)
 
@@ -20,6 +20,11 @@ def xuat_hang():
     return render_template('xuat_hang.html')
 
 
+@core.route('/nhap_hang')
+def nhap_hang():
+    return render_template('nhap_hang.html')
+
+
 @core.route('/misa_request', methods=['GET', 'POST'])
 def misa_request():
     if request.method == 'POST':
@@ -31,11 +36,14 @@ def misa_request():
             except: return render_template('misa_refuse.html')
 
             if misa_check(df):
+                add_modi_info(df)
                 df.to_sql('tmp', engine, if_exists='replace', index=False)
                 return redirect(url_for('core.misa_uploaded'))
             else:
                 return render_template('misa_refuse.html') 
     return render_template('misa.html')
+
+
 
 @core.route('/misa_uploaded', methods=['GET', 'POST'])
 def misa_uploaded():
@@ -48,11 +56,22 @@ def misa_uploaded():
     column_names = df.columns.values
     return render_template('misa_uploaded.html', rows=rows, column_names=column_names)
 
+
+
 @core.route('/misa_confirmed', methods=['GET', 'POST'])
 def misa_confirmed():
-    query = """
-    SELECT *
-        FROM tmp
-    """
-    pd.read_sql_query(query, engine).to_sql('misa', engine, if_exists='append', index=False)
+    query = """SELECT * FROM tmp """
+    delete_query = """DELETE FROM tmp"""
+
+    # write new rows to misa table
+    df = pd.read_sql_query(query, engine)
+    df.to_sql('misa', engine, if_exists='append', index=False)
+
+    # delete tmp table after use
+    session.execute(delete_query)
+    session.commit()
+
+    # call misa process
+    misa_process()
+    
     return render_template('misa_confirmed.html')
