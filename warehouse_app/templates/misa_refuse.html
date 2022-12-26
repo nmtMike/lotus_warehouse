@@ -2,6 +2,13 @@
 {% block content %}
 <div class="container">
     <h5>Your uploaded file doesn't match Misa template, check again !!!</h5>
+    <ul>
+        {% for err in err_list %}
+            <li> {{err}} </li>
+        {% endfor %}
+    </ul>
+
+
 </div>
 
 {% endblock %}

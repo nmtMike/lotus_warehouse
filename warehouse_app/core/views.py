@@ -1,7 +1,7 @@
 from flask import render_template,request, Blueprint, redirect, url_for
 import pandas as pd
 from warehouse_app.models import engine, session
-from warehouse_app.function import misa_check, add_modi_info, misa_process
+from warehouse_app.function import misa_column_check, misa_constraints_check, add_modi_info, misa_process
 
 core = Blueprint('core', __name__)
 
@@ -30,17 +30,20 @@ def misa_request():
     if request.method == 'POST':
         f = request.files['file']
         f_name = f.filename
+        err_list = []
         
         if f_name:
             try: df = pd.read_excel(request.files.get('file'))
-            except: return render_template('misa_refuse.html')
+            except: 
+                err_list.append('Must be Excel file')
+                return render_template('misa_refuse.html', err_list=err_list)
 
-            if misa_check(df):
+            if misa_column_check(df) and misa_constraints_check(df, err_list):
                 add_modi_info(df)
-                df.to_sql('tmp', engine, if_exists='replace', index=False)
+                df.to_sql('tmp_misa', engine, if_exists='replace', index=False)
                 return redirect(url_for('core.misa_uploaded'))
             else:
-                return render_template('misa_refuse.html') 
+                return render_template('misa_refuse.html', err_list=err_list) 
     return render_template('misa.html')
 
 
@@ -49,7 +52,7 @@ def misa_request():
 def misa_uploaded():
     query = """
     SELECT *
-        FROM tmp
+        FROM tmp_misa
     """
     df = pd.read_sql_query(query, engine)
     rows = df.values.tolist()
@@ -60,8 +63,8 @@ def misa_uploaded():
 
 @core.route('/misa_confirmed', methods=['GET', 'POST'])
 def misa_confirmed():
-    query = """SELECT * FROM tmp """
-    delete_query = """DELETE FROM tmp"""
+    query = """SELECT * FROM tmp_misa """
+    delete_query = """DELETE FROM tmp_misa"""
 
     # write new rows to misa table
     df = pd.read_sql_query(query, engine)
