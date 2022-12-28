@@ -1,0 +1,21 @@
+Constraints:
+-	Not Null:
+o	Ngay
+o	Ma_don_hang
+o	Dien_giai_chung
+o	ma_khach_hang
+o	ma_san_pham
+o	so_lo_ma_lo
+o	ma_kho
+o	ma_kho_tinh_trang
+
+
+Status order:
+-	xac_nhan_don: chờ xác nhận soạn hàng
+-	xac_nhan_soan_hang: đang soạn hàng
+-	dang_soan_hang: hàng đang tiến hành soạn
+-	da_soan_hang: hàng đã soạn xong và chờ đóng gói
+-	
+-	dang_dong_goi: đang đóng gói
+-	da_dong_goi	
+

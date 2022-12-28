@@ -64,17 +64,17 @@ def misa_uploaded():
 @core.route('/misa_confirmed', methods=['GET', 'POST'])
 def misa_confirmed():
     query = """SELECT * FROM tmp_misa """
-    delete_query = """DELETE FROM tmp_misa"""
 
     # write new rows to misa table
     df = pd.read_sql_query(query, engine)
     df.to_sql('misa', engine, if_exists='append', index=False)
 
-    # delete tmp table after use
-    session.execute(delete_query)
-    session.commit()
+    # # delete tmp table after use
+    # delete_query = """ DELETE FROM tmp_misa """
+    # session.execute(delete_query)
+    # session.commit()
 
     # call misa process
     misa_process()
     
-    return render_template('misa_confirmed.html')
+    return render_template('transaction_confirmed.html')

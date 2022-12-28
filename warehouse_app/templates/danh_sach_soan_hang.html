@@ -1,48 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<script language="JavaScript">
-  function toggle(source) {
-    checkboxes = document.getElementsByName('foo');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-      checkboxes[i].checked = source.checked;
-    }
-  }
-</script>
-
-
 
 <div class="container">
-  <form action="" method="POST">
-    <input class="btn btn-secondary" type="submit" value="Submit">
-    <table
-      class="table table-hover">
-
-      <thead>
-        <tr>
-          <th data-field="id">confirmed</th>
-          <th data-field="ngay">Ngay</th>
-          <th data-field="ma_don_hang">ma don hang</th>
-          <th>dien giai chung</th>
-          <th>Ma khach hang</th>
-          <th>dia chi giao hang</th>
-          <th>updator</th>
-          <th>update time</th>
-          <th>Selected</th>
-        </tr>
-      </thead>
-      <tbody>
-        {%for i in range(0, len)%}
-          <tr>
-            {% for data in rows[i] %}
-              <td>{{data}} </td>
-            {%endfor%}
-            <td><input class="form-check-input" type="checkbox" name="id_don_hang" value="{{id_list[i]}}" checked></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-
-    </table>
-  </form>
+    <h5>Danh sách soạn hàng</h5>
+    <form action="" method="POST">
+        <!-- <input class="btn btn-secondary" type="submit" value="Submit"> -->
+        <table
+          class="table table-hover">
+    
+          <thead>
+            <tr>
+                {% for column_name in column_names %}
+                    <th>{{column_name}}</th>
+                {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {%for i in range(0, len)%}
+              <tr>
+                {% for data in rows[i] %}
+                  <td>{{data}} </td>
+                {%endfor%}
+                <!-- <td><input class="form-check-input" type="checkbox" name="id_don_hang" value="{{id_list[i]}}" checked></td> -->
+              </tr>
+            {% endfor %}
+          </tbody>
+    
+        </table>
+      </form>
   
 </div>
 

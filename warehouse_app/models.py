@@ -10,6 +10,6 @@ url_object = URL.create(
     port="5433",
     database="lotusdb")
 
-engine = create_engine(url_object)
+engine = create_engine(url_object, pool_pre_ping=True)
 session = Session(engine)
 
