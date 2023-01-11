@@ -12,10 +12,14 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="navbar-nav">
-                <a class="btn btn-outline-success" href="{{url_for('core.index')}}" role="button">HOME_PAGE</a>
+                <a class="btn btn-outline-success m-1" href="{{url_for('core.index')}}" role="button">HOME_PAGE</a>
 
+                
+                <a class="btn btn-outline-primary m-1" href="{{url_for('core.xuat_hang')}}" role="button">Xuất hàng</a>
+                <a class="btn btn-outline-primary m-1" href="{{url_for('core.nhap_hang')}}" role="button">Nhập hàng</a>
+                <a class="btn btn-outline-primary m-1" href="#" role="button">Tra cứu mã đơn hàng</a>
                 <a class="nav-item nav-link" href=#>Sơ đồ tổ chức</a>
-
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tài liệu</a>
                     <ul class="dropdown-menu">
@@ -24,6 +28,8 @@
                       <li><a class="dropdown-item" href="#">Thông tin sản phẩm</a></li>
                     </ul>
                 </li>
+
+
                 
             </div>
         </nav>

@@ -51,6 +51,12 @@ def misa_constraints_check(df:pd.DataFrame, existed_err:list = []):
     if len(ma_don_hang_existed) > 0:
         err_list.append(f'mã đơn hàng xuất đã tồn tại: {ma_don_hang_existed}')
 
+    # check duplicates in ma_don_hang va dien_giai_chung
+    df_tmp = df[['ma_don_hang', 'dien_giai_chung']].drop_duplicates()
+    df_tmp = df_tmp.groupby(['ma_don_hang']).count().reset_index()
+    mdh_err = df_tmp[df_tmp['dien_giai_chung'] > 1]['ma_don_hang'].tolist()
+    if len(mdh_err) > 0:
+        err_list.append(f'nội dung đơn hàng khác nhau trên cùng mã: {mdh_err}')
 
 
     if len(err_list) == 0:

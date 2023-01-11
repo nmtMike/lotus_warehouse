@@ -2,13 +2,14 @@
 {% block content %}
 
 <div class="container">
+    <br>
     <a class="btn btn-outline-primary" href="{{url_for('xuat_hang.xac_nhan_don')}}" role="button">Xác nhận đơn</a>
     <a class="btn btn-outline-primary" href="{{url_for('xuat_hang.huy_xac_nhan_don')}}" role="button">Hủy xác nhận đơn</a> 
     <hr class="my-4">
     <br>
     <a class="btn btn-outline-primary" href="{{url_for('xuat_hang.danh_sach_soan_hang')}}" role="button">Danh sách soạn hàng</a>
-    <a class="btn btn-outline-primary" href="#" role="button">Danh sách đóng gói</a>
-    <a class="btn btn-outline-primary" href="#" role="button">Đơn hàng cần đóng gói</a>
+    <a class="btn btn-outline-primary" href="{{url_for('xuat_hang.danh_sach_dong_goi')}}" role="button">Danh sách đóng gói</a>
+    <a class="btn btn-outline-primary" href="#" role="button">Đơn hàng đã đóng gói</a>
     <hr class="my-4">
     <br>
     <a class="btn btn-outline-primary" href="#" role="button">Đơn hàng sẵn sàng giao</a>

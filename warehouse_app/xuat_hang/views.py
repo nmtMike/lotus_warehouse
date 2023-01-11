@@ -69,15 +69,31 @@ def huy_xac_nhan_don():
 @xuat_hang.route('/danh_sach_soan_hang')
 def danh_sach_soan_hang():
     query = """
-    SELECT ma_san_pham, ten_san_pham, so_lo_ma_lo, don_vi_tinh, SUM(so_luong) AS so_luong
-        FROM chi_tiet_don_hang_xuat ctdhx
-        LEFT JOIN san_pham sp USING(id_san_pham)
-        LEFT JOIN don_hang_xuat dhx USING(id_don_hang_xuat)
-        WHERE dhx.latest_status = 'xac_nhan_soan_hang'
-        GROUP BY ma_san_pham, ten_san_pham, so_lo_ma_lo, don_vi_tinh
+    SELECT *
+        FROM danh_sach_soan_hang
     """
     df = pd.read_sql_query(query, engine)
     rows = df[['ma_san_pham', 'ten_san_pham', 'so_lo_ma_lo', 'don_vi_tinh', 'so_luong']].values.tolist()
     column_names = df.columns.values
 
     return render_template('danh_sach_soan_hang.html', len=len(rows), rows=rows, column_names=column_names)
+
+
+@xuat_hang.route('/danh_sach_dong_goi')
+def danh_sach_dong_goi():
+    query = """ 
+    SELECT *
+        FROM danh_sach_dong_goi
+    """
+    df = pd.read_sql_query(query, engine)
+
+    don_hang = df[['ma_don_hang', 'ma_khach_hang', 'dien_giai_chung']].drop_duplicates().values.tolist()
+    i = 0
+    for dh in don_hang:
+        mdh = dh[0]
+        sp = df[df['ma_don_hang'] == mdh][['ma_san_pham', 'ten_san_pham', 'so_lo_ma_lo', 'don_vi_tinh', 'so_luong']].values.tolist()
+        dh.append(sp)
+        dh.append(f'dh{i}')
+        i += 1
+    
+    return render_template('danh_sach_dong_goi.html', don_hang=don_hang)

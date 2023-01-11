@@ -1,0 +1,68 @@
+DROP TABLE IF EXISTS san_pham CASCADE;
+CREATE TABLE IF NOT EXISTS san_pham (
+	ma_san_pham varchar(255) NOT NULL,
+	ten_san_pham varchar(255) NOT NULL,
+	don_vi_tinh varchar(255) NOT NULL,
+	nhom_vthh varchar(255) NOT NULL,
+	nha_san_xuat varchar(255),
+	so_lo_ma_lo varchar(255) NOT NULL,
+	han_su_dung varchar(255) NOT NULL,
+	id_san_pham serial PRIMARY KEY,
+		UNIQUE(ma_san_pham, so_lo_ma_lo)
+);
+
+
+DROP TABLE IF EXISTS don_hang_xuat CASCADE;
+CREATE TABLE IF NOT EXISTS don_hang_xuat(
+	ngay timestamp NOT NULL,
+	ma_don_hang varchar(255) NOT NULL UNIQUE,
+	ma_khach_hang varchar(255) NOT NULL,
+	dien_giai_chung varchar(400),
+	dia_chi_giao_hang varchar(400),
+	latest_status varchar(30) NOT NULL,
+	updator varchar(30) NOT NULL,
+	updated_time timestamp NOT NULL,
+	id_don_hang_xuat serial PRIMARY KEY
+);
+
+
+DROP TABLE IF EXISTS chi_tiet_don_hang_xuat CASCADE;
+CREATE TABLE IF NOT EXISTS chi_tiet_don_hang_xuat (
+	id_don_hang_xuat int NOT NULL,
+	id_san_pham int NOT NULL,
+	ma_kho_tinh_trang varchar(255) NOT NULL,
+	so_luong float NOT NULL,
+	id_chi_tiet_don_hang serial PRIMARY KEY,
+		FOREIGN KEY (id_don_hang_xuat)
+			REFERENCES don_hang_xuat (id_don_hang_xuat),
+		FOREIGN KEY (id_san_pham)
+			REFERENCES san_pham (id_san_pham)
+);
+
+
+DROP TABLE IF EXISTS transaction_xuat CASCADE;
+CREATE TABLE IF NOT EXISTS transaction_xuat (
+	id_chi_tiet_don_hang int NOT NULL,
+	status varchar(255) NOT NULL,
+	updator varchar(255) NOT NULL,
+	updated_time timestamp NOT NULL,
+	id_transaction_xuat serial PRIMARY KEY,
+		FOREIGN KEY (id_chi_tiet_don_hang)
+			REFERENCES chi_tiet_don_hang_xuat (id_chi_tiet_don_hang)
+);
+
+
+DELETE FROM misa;
+
+
+CREATE OR REPLACE VIEW public.danh_sach_soan_hang
+AS SELECT sp.ma_san_pham,
+    sp.ten_san_pham,
+    sp.so_lo_ma_lo,
+    sp.don_vi_tinh,
+    sum(ctdhx.so_luong) AS so_luong
+   FROM chi_tiet_don_hang_xuat ctdhx
+     LEFT JOIN san_pham sp USING (id_san_pham)
+     LEFT JOIN don_hang_xuat dhx USING (id_don_hang_xuat)
+  WHERE dhx.latest_status::text = 'xac_nhan_soan_hang'::text
+  GROUP BY sp.ma_san_pham, sp.ten_san_pham, sp.so_lo_ma_lo, sp.don_vi_tinh;
