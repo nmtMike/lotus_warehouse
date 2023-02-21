@@ -11,7 +11,7 @@ def misa_column_check(df:pd.DataFrame):
         FROM misa
         LIMIT 0
     """
-    misa_cols = pd.read_sql_query(query, engine).columns[:-2]
+    misa_cols = pd.read_sql_query(query, engine).columns[:-3]
     try: 
         if sum(df.columns == misa_cols) == len(misa_cols):
             return True
